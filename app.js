@@ -25,9 +25,14 @@ const gameContainer = document.querySelector('#game');
 const scoreBoard = document.querySelector('#score-board');
 const player1Score = document.querySelector('#player1-score');
 const player2Score = document.querySelector('#player2-score');
+const history = document.querySelector('#history');
+const historyHeading = document.querySelector('#history h3');
+const guessedRecords = document.querySelector('#guessed-records');
+
+
 
 const lowerTxt = document.querySelector('#lower-text');
-const homeBtn = document.querySelector('#restart');
+const restart = document.querySelector('#restart');
 const playAgainBtn = document.querySelector('#play-again');
 
 // Hide all content other than start screen
@@ -40,8 +45,13 @@ player1Score.style.display = "none";
 player2Score.style.display = "none";
 upperTxt.style.display = "none";
 lowerTxt.style.display = "none";
-homeBtn.style.display = "none";
+restart.style.display = "none";
 playAgainBtn.style.display = "none";
+historyHeading.style.display = "none";
+
+
+
+
 
 // List of available cards
 const characters = [
@@ -78,7 +88,7 @@ function selectCards(array, num) {
     return cards;
 }
 
-// Helper function to shuffle an array based on an algorithm called Fisher Yates
+// Helper function to shuffle the array
 function shuffle(array) {
     let counter = array.length;
 
@@ -233,6 +243,11 @@ function handleCardClickTwoPlayer(event) {
                     lowerTxt.innerText = `${name1.value}, you made a match!`;
                     plyr1score++;
                     player1Score.innerText = `${name1.value}: ${plyr1score}`;
+                    let guessedRecordsList = document.createElement('li');
+                    guessedRecordsList.textContent = `${name1.value} guessed : ${event.target.className}`;
+                    guessedRecords.append(guessedRecordsList);
+
+
                 
                     setTimeout(() => {
                         currentAttempt[0].style.backgroundImage = 'none';
@@ -247,6 +262,14 @@ function handleCardClickTwoPlayer(event) {
                     lowerTxt.innerText = `${name2.value}, you made a match!`;  
                     plyr2score++;
                     player2Score.innerText = `${name2.value}: ${plyr2score}`; 
+                    // history.innerText = `${name2.value} guessed : ${event.target.className}`;
+
+                    let guessedRecordsList = document.createElement('li');
+                    let line = document.createElement('hr')
+                    guessedRecordsList.textContent = `${name2.value} guessed : ${event.target.className}`;
+                    guessedRecords.append(guessedRecordsList);
+
+
 
                     setTimeout(() => {
                         currentAttempt[0].style.backgroundImage = 'none';
@@ -317,7 +340,7 @@ function handleCardClickTwoPlayer(event) {
 }
 
 // Reset the game, taking the user back to the start screen
-homeBtn.addEventListener('click', function () {
+restart.addEventListener('click', function () {
 
     // Remove current cards div from the game div
     while (gameContainer.firstChild) {
@@ -332,7 +355,7 @@ homeBtn.addEventListener('click', function () {
     onePlayerOptions.style.display = "none";
     twoPlayerOptions.style.display = "none";
 
-    homeBtn.style.display = "none";
+    restart.style.display = "none";
     scoreBoard.style.display = "none";
     player1Score.style.display = "none";
     player2Score.style.display = "none";
@@ -340,6 +363,15 @@ homeBtn.addEventListener('click', function () {
     lowScoreTxt.style.display = 'none';
     upperTxt.style.display = 'none';
     lowerTxt.style.display = "none";
+    
+    
+    guessedRecords.innerText = '';
+    historyHeading.style.display = "none";
+
+
+
+    
+
 
     playAgainBtn.style.display = "none";
 
@@ -387,8 +419,14 @@ playAgainBtn.addEventListener('click', function () {
         lowerTxt.innerText = `${name1.value}'s turn`;
     }
 
-    lowerTxt.style.display = "none";
+    lowerTxt.innerText = '';
+    guessedRecords.innerText = '';
+
     playAgainBtn.style.display = "none";
+
+
+
+
 }
 )
 
@@ -404,11 +442,12 @@ startScreenForm.addEventListener('submit', function (evt) {
         onePlayerOptions.style.display = "block";
     } else if (evt.submitter === twoPlayerGameBtn) {
         twoPlayerOptions.style.display = "block";
+
     }
 
     currentNumCardsMsg.innerText = `${numCardsRange.value} cards`;
 
-    homeBtn.style.display = "block";
+    restart.style.display = "block";
 })
 
 
@@ -471,6 +510,8 @@ optionsScreenForm.addEventListener('submit', (evt) => {
     } else if (evt.submitter === twoPlayerStartBtn) {
         onePlayerGame = false;
         twoPlayerOptions.style.display = "none";
+        historyHeading.style.display = "block";
+
 
         createDivsForCards(shuffledCards, handleCardClickTwoPlayer);
     
@@ -492,6 +533,7 @@ optionsScreenForm.addEventListener('submit', (evt) => {
         player1turn = true;
         lowerTxt.innerText = `${name1.value}'s turn`;
         lowerTxt.style.display = "block";
+
     }
 }
 )

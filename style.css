@@ -143,6 +143,16 @@ body {
     background-color: #000042B3;
 }
 
+#history{
+    position: absolute;
+    margin-left: 400px;
+    margin-top: 50px;
+
+    color: #cce4e7;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+}
 #lower-text{
     color: #daf015;
     font-size: 100px;
